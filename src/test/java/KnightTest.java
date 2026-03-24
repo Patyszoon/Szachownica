@@ -15,7 +15,7 @@ public class KnightTest {
 //    // executes before each test method in this class
 //    @BeforeEach
 //    void init() {
-//        //nadac wartosci przeszkodom
+//
 //    }
 
     // brak przeszkod, knight znajduje sie w centrum planszy, mozliwych attakow = 8
@@ -62,6 +62,7 @@ public class KnightTest {
         assertThat(result, hasItem(new Point(6,4)));
     }
 
+    // skoczek w prawym dolnym rogu planszy
     @Test
     void knightInCornerWith2Moves(){
         Knight knight = new Knight();
@@ -79,6 +80,7 @@ public class KnightTest {
         assertThat(result, hasItem(new Point(6,2)));
     }
 
+    // skoczek nie ma mozliwych ruchow, wszedzie przeszkody
     @Test
     void knightHasNoMoves(){
         Knight knight = new Knight();
