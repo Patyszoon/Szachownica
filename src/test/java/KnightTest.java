@@ -8,7 +8,6 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class KnightTest {
 
@@ -102,5 +101,38 @@ public class KnightTest {
         assertThat(result, hasSize(0)); // nie ma ruchow?
     }
 
+    // skoczek jest w lewym dolnym rogu, robi ruch {-1,-2}
+    @Test
+    void knightBounceInLowerLeftCorner1(){
+        Knight knight = new Knight();
+        int n = 8;
+        int knightX = 0;
+        int knightY = 0;
+        Set<Point> przeszkody = new HashSet<>();
+
+        Set<Point> result = knight.calculateAttack(n, knightX, knightY, przeszkody);
+//
+//        assertThat(result, hasSize(2)); // ma mozliwe tylko dwa ruchy
+//        assertThat(result, hasItem(new Point()));
+//        assertThat(result, hasItem(new Point()));
+    }
+
+    // skoczek jest w lewym dolnym rogu, robi ruch {-2,1}
+    @Test
+    void knightBounceInLowerLeftCorner2(){
+        Knight knight = new Knight();
+        int n = 8;
+        int knightX = 0;
+        int knightY = 0;
+        Set<Point> przeszkody = new HashSet<>();
+
+
+    }
+
+    //skoczek na pozycji (7,3)
+    @Test
+    void knightBounceOnRightMiddle(){
+
+    }
 
 }

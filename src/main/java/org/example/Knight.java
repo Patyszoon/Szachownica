@@ -26,7 +26,10 @@ public class Knight {
                     possibleMoves.add(nowaPozycja);
                 }
             }else{ // jesli sie nie miesci, to odbicie
-                calculateBouncePosition(n, knightX, knightY);
+                Point odbiciePozycja = calculateBouncePosition(n, knightX, knightY, ruch[0], ruch[1]);
+                if(!przeszkody.contains(odbiciePozycja)){
+                    possibleMoves.add(odbiciePozycja);
+                }
             }
         }
 
@@ -34,10 +37,23 @@ public class Knight {
     }
 
     // odbicie od planszy
-    public Point calculateBouncePosition(int n, int knightX, int knightY){
-        Point bouncePosition = new Point();
+    public Point calculateBouncePosition(int n, int knightX, int knightY, int dx, int dy){
+        int newX = knightX + dx;
+        int newY = knightY + dy;
+
+        if(newX < 0){
+            newX = -newX - 1;
+        }else if(newX >= n){
+            newX = 2*n - newX - 1;
+        }
+
+        if(newY < 0){
+            newY = -newY - 1;
+        }else if(newY >= n){
+            newY = 2*n - newY - 1;
+        }
         // obliczenie odbicia skoczka
-        return bouncePosition;
+        return new Point(newX, newY);
 
     }
 }
