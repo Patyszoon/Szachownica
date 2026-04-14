@@ -8,8 +8,12 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 public class KnightTest {
+    private final Knight knight = new Knight();
+    private final int n = 8;
+
 
 //    // executes before each test method in this class
 //    @BeforeEach
@@ -20,8 +24,6 @@ public class KnightTest {
     // brak przeszkod, knight znajduje sie w centrum planszy, mozliwych attakow = 8
     @Test
     void knightHas8PossibleMoves(){
-        Knight knight = new Knight();
-        int n = 8;
         int knightX = 4;
         int knightY = 3;
         Set<Point> przeszkody = new HashSet<>();// pusty set
@@ -42,8 +44,6 @@ public class KnightTest {
     // skoczek w centrum, sa 2 przeszkody
     @Test
     void knightInCenterWith2Obstacles(){
-        Knight knight = new Knight();
-        int n = 8;
         int knightX = 4;
         int knightY = 3;
         Set<Point> przeszkody = new HashSet<>();
@@ -64,8 +64,6 @@ public class KnightTest {
     // skoczek w prawym dolnym rogu planszy
     @Test
     void knightInCornerWith2Moves(){
-        Knight knight = new Knight();
-        int n = 8;
         int knightX = 7;
         int knightY = 0;
         Set<Point> przeszkody = new HashSet<>();
@@ -82,8 +80,6 @@ public class KnightTest {
     // skoczek nie ma mozliwych ruchow, wszedzie przeszkody
     @Test
     void knightHasNoMoves(){
-        Knight knight = new Knight();
-        int n = 8;
         int knightX = 4;
         int knightY = 3;
         Set<Point> przeszkody = new HashSet<>();
@@ -104,8 +100,6 @@ public class KnightTest {
     // skoczek jest w lewym dolnym rogu, robi ruch {-1,-2}
     @Test
     void knightBounceInLowerLeftCorner1(){
-        Knight knight = new Knight();
-        int n = 8;
         int knightX = 0;
         int knightY = 0;
         Set<Point> przeszkody = new HashSet<>();
@@ -117,22 +111,15 @@ public class KnightTest {
 //        assertThat(result, hasItem(new Point()));
     }
 
-    // skoczek jest w lewym dolnym rogu, robi ruch {-2,1}
+    // skoczek pozcyja (7,7), wykonuje ruch {1,2}
     @Test
     void knightBounceInLowerLeftCorner2(){
-        Knight knight = new Knight();
-        int n = 8;
-        int knightX = 0;
-        int knightY = 0;
+        int knightX = 7;
+        int knightY = 7;
         Set<Point> przeszkody = new HashSet<>();
+        Point result = knight.calculateBouncePosition(n, 7, 7, 1, 2);
+        assertThat(result, equalTo(new Point(6, 5)));
 
 
     }
-
-    //skoczek na pozycji (7,3)
-    @Test
-    void knightBounceOnRightMiddle(){
-
-    }
-
 }

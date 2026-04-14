@@ -41,18 +41,38 @@ public class Knight {
         int newX = knightX + dx;
         int newY = knightY + dy;
 
-        if(newX < 0){
-            newX = -newX - 1;
-        }else if(newX >= n){
-            newX = 2*n - newX - 1;
+//        if(newX < 0){
+//            newX = -newX - 1;
+//        }else if(newX >= n){
+//            newX = 2*n - newX - 1;
+//        }
+//
+//        if(newY < 0){
+//            newY = -newY - 1;
+//        }else if(newY >= n){
+//            newY = 2*n - newY - 1;
+//        }
+
+        if (newX < 0 || newX >= n) {
+            dx = -dx;  // odwroc kierunek w x
+            newX = knightX + dx;
+            // poki jest poza plansza - odbijaj ponownie
+            while (newX < 0 || newX >= n) {
+                dx = -dx;
+                newX = knightX + dx;
+            }
         }
 
-        if(newY < 0){
-            newY = -newY - 1;
-        }else if(newY >= n){
-            newY = 2*n - newY - 1;
+        // odbiciedla y
+        if (newY < 0 || newY >= n) {
+            dy = -dy;
+            newY = knightY + dy;
+            while (newY < 0 || newY >= n) {
+                dy = -dy;
+                newY = knightY + dy;
+            }
         }
-        // obliczenie odbicia skoczka
+
         return new Point(newX, newY);
 
     }
