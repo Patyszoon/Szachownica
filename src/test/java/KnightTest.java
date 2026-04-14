@@ -97,29 +97,79 @@ public class KnightTest {
         assertThat(result, hasSize(0)); // nie ma ruchow?
     }
 
-    // skoczek jest w lewym dolnym rogu, robi ruch {-1,-2}
-    @Test
-    void knightBounceInLowerLeftCorner1(){
-        int knightX = 0;
-        int knightY = 0;
-        Set<Point> przeszkody = new HashSet<>();
-
-        Set<Point> result = knight.calculateAttack(n, knightX, knightY, przeszkody);
-//
-//        assertThat(result, hasSize(2)); // ma mozliwe tylko dwa ruchy
-//        assertThat(result, hasItem(new Point()));
-//        assertThat(result, hasItem(new Point()));
-    }
-
     // skoczek pozcyja (7,7), wykonuje ruch {1,2}
     @Test
-    void knightBounceInLowerLeftCorner2(){
+    void knightBounceTest1() {
         int knightX = 7;
         int knightY = 7;
         Set<Point> przeszkody = new HashSet<>();
+        Set<Point> result = knight.calculateAttack(n, knightX, knightY, przeszkody);
+
+        //  pole (6,5) powinno byc w wynikach
+        assertThat(result, hasItem(new Point(6, 5)));
+        assertThat(result, hasItem(new Point(5, 6)));
+
+        // wypisuje wsyzstkie ruchy
+        System.out.println("Ruchy skoczka z (7,7) po odbiciach:");
+        for (Point p : result) {
+            System.out.println("  -> (" + p.x + ", " + p.y + ")");
+        }
+    }
+
+    @Test
+    void knightTest2(){
+        int knightX = 1;
+        int knightY = 1;
+        Set<Point> przeszkody = new HashSet<>();
+
+        Set<Point> result = knight.calculateAttack(n, knightX, knightY, przeszkody);
+
+        // wsord wynikow powinien byc (0,3)
+        assertThat(result, hasItem(new Point(0, 3)));
+
+        System.out.println("Ruchy skoczka z (1,1) po odbiciach:");
+        for (Point p : result) {
+            System.out.println("  -> (" + p.x + ", " + p.y + ")");
+        }
+    }
+
+    //testuje konkretna funkcje calculateBouncePosition
+    @Test
+    void knightBounceTest1_calculateBouncePositionTest(){
         Point result = knight.calculateBouncePosition(n, 7, 7, 1, 2);
         assertThat(result, equalTo(new Point(6, 5)));
-
-
     }
+
+    // z (0,1) ruch {-2,-1} - wiele odbic
+    @Test
+    void knightBounceTest3() {
+        Point result = knight.calculateBouncePosition(n, 0, 1, -2, -1);
+
+        // oczekiwany wynik
+        // newX = -2 -> odbicie: dx=2, newX=2
+        // newY = 0
+        assertThat(result, equalTo(new Point(2,0)));
+    }
+
+    @Test
+    void knightBounceTest1WithObstacle() {
+        int knightX = 7;
+        int knightY = 7;
+        Set<Point> przeszkody = new HashSet<>();
+        przeszkody.add(new Point(6, 5)); // przeszkoda w miejscu odbicia
+        Set<Point> result = knight.calculateAttack(n, knightX, knightY, przeszkody);
+
+        //  pole (6,5) NIE powinno byc w wynikach
+        assertThat(result, not(hasItem(new Point(6, 5))));
+        assertThat(result, hasItem(new Point(5, 6)));
+
+        // wypisuje wsyzstkie ruchy
+        System.out.println("Ruchy skoczka z (7,7) po odbiciach (z przeszkoda):");
+        for (Point p : result) {
+            System.out.println("  -> (" + p.x + ", " + p.y + ")");
+        }
+    }
+
+
+
 }
