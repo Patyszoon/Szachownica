@@ -7,7 +7,7 @@ import java.util.Set;
 public class Knight {
 
     // plansza rozmiarow n x n
-    public Set<Point> calculateAttack(int n, int knightX, int knightY, Set<Point> przeszkody){
+    public Set<Point> calculateAttack(int n, int knightX, int knightY, Set<Point> przeszkody, Set<Point> lustra){
         Set<Point> possibleMoves = new HashSet<>();
 
         //wszystkie mozliwe ruchy skoczka
@@ -22,11 +22,17 @@ public class Knight {
             if(newX >= 0 && newX < n && newY >= 0 && newY < n){
                 Point nowaPozycja = new Point(newX, newY); // sprawdzana pozycja
 
-                if(!przeszkody.contains(nowaPozycja)){
+                // sprawdz czy na tej pozycji jest lustro
+                if (lustra != null && lustra.contains(nowaPozycja)) {
+                    // jest lustro - kontynuuj ruch
+                    nowaPozycja = calculateMirrorPosition(n, nowaPozycja.x, nowaPozycja.y, ruch[0], ruch[1], lustra);
+                }else if(!przeszkody.contains(nowaPozycja)){
                     possibleMoves.add(nowaPozycja);
                 }
             }else{ // jesli sie nie miesci, to odbicie
                 Point odbiciePozycja = calculateBouncePosition(n, knightX, knightY, ruch[0], ruch[1]);
+                //TODO: sprawdz czy po odbiciu trafilismy na lustro
+
                 if(!przeszkody.contains(odbiciePozycja)){
                     possibleMoves.add(odbiciePozycja);
                 }
@@ -76,4 +82,15 @@ public class Knight {
         return new Point(newX, newY);
 
     }
-}
+
+    public Point calculateMirrorPosition(int n, int lustroX, int lustroY, int dx, int dy, Set<Point> lustra) {
+        // wykonaj ten sam ruch z pozycji lustra
+        int newX = lustroX + dx;
+        int newY = lustroY + dy;
+
+        Point nowaPozycja = new Point(newX, newY);
+        // TODO: sprawdz czy nowa pozycja poza plansza, oraz czy nowa pozycja to lustro. petle?
+        return nowaPozycja;
+    }
+
+    }
