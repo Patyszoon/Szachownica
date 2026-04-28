@@ -26,7 +26,7 @@ public class KnightTest {
         System.out.println("\n[" + testInfo.getDisplayName() + "]");
 
         if (result == null) {
-            System.out.println("Brak wyników (result = null)");
+            System.out.println("Brak wyników jako Set (result = null)");
             return;
         }
         System.out.println("Ruchy skoczka z (" + knightX + "," + knightY + "):");
@@ -43,8 +43,7 @@ public class KnightTest {
     // brak przeszkod, knight znajduje sie w centrum planszy, mozliwych attakow = 8
     @Test
     void knightHas8PossibleMoves(){
-        knightX = 4;
-        knightY = 3;
+        knightX = 4; knightY = 3;
         Set<Point> przeszkody = new HashSet<>();// pusty set
         Set<Point> lustra = new HashSet<>();// pusty set
 
@@ -64,8 +63,7 @@ public class KnightTest {
     // skoczek w centrum, sa 2 przeszkody
     @Test
     void knightInCenterWith2Obstacles(){
-        knightX = 4;
-        knightY = 3;
+        knightX = 4; knightY = 3;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();// pusty set
         przeszkody.add(new Point(3, 1));
@@ -85,8 +83,7 @@ public class KnightTest {
     // skoczek w prawym dolnym rogu planszy
     @Test
     void knightInCornerWith2Moves(){
-        knightX = 7;
-        knightY = 0;
+        knightX = 7; knightY = 0;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();// pusty set
         przeszkody.add(new Point(5, 0));
@@ -102,8 +99,7 @@ public class KnightTest {
     // skoczek nie ma mozliwych ruchow, wszedzie przeszkody
     @Test
     void knightHasNoMoves(){
-        knightX = 4;
-        knightY = 3;
+        knightX = 4; knightY = 3;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();// pusty set
         przeszkody.add(new Point(2,2));
@@ -123,13 +119,14 @@ public class KnightTest {
     // skoczek przeskakuje przeszkody, pole pomiedzy nim a celem nie blokuje ruchu
     @Test
     void jumpOverObstacles() {
+        knightX = 4; knightY = 4;
         Set<Point> przeszkody = new HashSet<>();
         przeszkody.add(new Point(3, 4));
         przeszkody.add(new Point(4, 3));
 
-        Set<Point> moves = knight.calculateAttack(8, 4, 4, przeszkody, null);
+        result = knight.calculateAttack(8, knightX, knightY, przeszkody, null);
 
-        assertThat(moves, hasSize(8));
+        assertThat(result, hasSize(8));
     }
 
     // TESTY ODBIC
@@ -137,8 +134,7 @@ public class KnightTest {
     // skoczek pozcyja (7,7), wykonuje ruch {1,2}
     @Test
     void knightBounceTest1() {
-        knightX = 7;
-        knightY = 7;
+        knightX = 7; knightY = 7;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();// pusty set
         result = knight.calculateAttack(n, knightX, knightY, przeszkody, lustra);
@@ -150,8 +146,7 @@ public class KnightTest {
 
     @Test
     void knightBounceTest2(){
-        knightX = 1;
-        knightY = 1;
+        knightX = 1; knightY = 1;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();// pusty set
 
@@ -164,28 +159,30 @@ public class KnightTest {
     //testuje konkretna funkcje calculateBouncePosition
     @Test
     void knightBounceTest1_calculateBouncePositionTest(){
-        Point result = knight.calculateBouncePosition(n, 7, 7, 1, 2);
-        assertThat(result, equalTo(new Point(6, 5)));
+        knightX = 7; knightY = 7;
+        result = null;
+        Point resultPoint = knight.calculateBouncePosition(n, knightX, knightY, 1, 2);
+        assertThat(resultPoint, equalTo(new Point(6, 5)));
     }
 
     // z (0,1) ruch {-2,-1} - wiele odbic
     @Test
     void knightBounceTest3() {
-        knightX = 0;
-        knightY = 1;
-        // poprawić żeby result działal
-        Point result = knight.calculateBouncePosition(n, knightX, knightY, -2, -1);
+        knightX = 0; knightY = 1;
+
+        result = null;
+
+        Point resultPoint = knight.calculateBouncePosition(n, knightX, knightY, -2, -1);
 
         // oczekiwany wynik
         // newX = -2 -> odbicie: dx=2, newX=2
         // newY = 0
-        assertThat(result, equalTo(new Point(2,0)));
+        assertThat(resultPoint, equalTo(new Point(2,0)));
     }
 
     @Test
     void knightBounceTest1WithObstacle() {
-        knightX = 7;
-        knightY = 7;
+        knightX = 7; knightY = 7;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();// pusty set
         przeszkody.add(new Point(6, 5)); // przeszkoda w miejscu odbicia
@@ -203,8 +200,7 @@ public class KnightTest {
     void oneMirrorTestNoObstacles(){
         // skoczek (2,2), lustro na (4,3), ruch {2,1}:
         // (2,2)+(2,1)=(4,3) lustro -> (4,3)+(2,1)=(6,4)
-        knightX = 2;
-        knightY = 2;
+        knightX = 2; knightY = 2;
         Set<Point> lustra = new HashSet<>();
         lustra.add(new Point(4, 3));
 
@@ -219,8 +215,7 @@ public class KnightTest {
     // pozycja skoczka po przeskokou przez lustro nachodzi na przeszkode
     @Test
     void oneMirrorTestWithObstacles(){
-        knightX = 2;
-        knightY = 2;
+        knightX = 2; knightY = 2;
         Set<Point> przeszkody = new HashSet<>();
         Set<Point> lustra = new HashSet<>();
         // lustro na polu (4,3), na drodze ruchu {2,1}
@@ -245,10 +240,11 @@ public class KnightTest {
     void oneMirrorTestAndKnightOutOfBounds(){
         // skoczek (4,4), lustro na (6,5), ruch {2,1}
         // (4,4)+(2,1)=(6,5) lustro -> (6,5)+(2,1)=(8,6) poza plansze -> odbicie -> (6,6)
+        knightX = 4; knightY = 4;
         Set<Point> lustra = new HashSet<>();
         lustra.add(new Point(6, 5));
 
-        result = knight.calculateAttack(n, 4, 4, new HashSet<>(), lustra);
+        result = knight.calculateAttack(n, knightX, knightY, new HashSet<>(), lustra);
 
         assertThat(result, hasItem(new Point(4, 6)));       // wynik po lustrze i odbiciu
         assertThat(result, not(hasItem(new Point(6, 5)))); // lustro nie jest polem ataku
@@ -257,11 +253,12 @@ public class KnightTest {
     // test z dwoma lustrami - po przeskoku przez 1. lustro skoczek trafia na lustro nr. 2
     @Test
     void twoMirrorsTest(){
+        knightX = 0; knightY = 0;
         Set<Point> lustra = new HashSet<>();
 
         lustra.add(new Point(2, 1));
         lustra.add(new Point(4, 2));
-        result = knight.calculateAttack(8, 0, 0, new HashSet<>(), lustra);
+        result = knight.calculateAttack(8, knightX, knightY, new HashSet<>(), lustra);
         assertThat(result, hasItem(new Point(6, 3)));
         assertThat(result, not(hasItem(new Point(2, 1))));
         assertThat(result, not(hasItem(new Point(4, 2))));
@@ -275,6 +272,7 @@ public class KnightTest {
         // (1,2) lustro -> (2,4) lustro -> odbicie -> (3,2) lustro
         //   -> (4,4) lustro -> odbicie -> (5,2) lustro -> odbicie -> (4,4) *** PETLA ***
         // ruch {1,2} powinien zostac pominiery (zwraca null)
+        knightX = 0; knightY = 0;
 
         int boardSize = 6;
         Set<Point> lustra = new HashSet<>();
@@ -284,7 +282,7 @@ public class KnightTest {
         lustra.add(new Point(4, 4)); // L4 - tu powstaje petla
         lustra.add(new Point(5, 2)); // L5
 
-        result = knight.calculateAttack(boardSize, 0, 0, new HashSet<>(), lustra);
+        result = knight.calculateAttack(boardSize, knightX, knightY, new HashSet<>(), lustra);
         // zadne lustro nie jest polem ataku
         assertThat(result, not(hasItem(new Point(1, 2))));
         assertThat(result, not(hasItem(new Point(2, 4))));
@@ -303,12 +301,13 @@ public class KnightTest {
     void threeMirrorsTestBoardIs6x6(){
         // n=6, skoczek (0,0), ruch {2,1}:
         // (2,1) lustro -> (4,2) lustro -> poza plansze -> odbicie -> (2,3) lustro -> (0,2) lustro -> (4,4)
+        knightX = 0; knightY = 0;
         int boardSize = 6;
         Set<Point> lustra = new HashSet<>();
         lustra.add(new Point(2, 1));
         lustra.add(new Point(4, 2));
         lustra.add(new Point(2, 3));
-        result = knight.calculateAttack(boardSize, 0, 0, new HashSet<>(), lustra);
+        result = knight.calculateAttack(boardSize, knightX, knightY, new HashSet<>(), lustra);
         assertThat(result, notNullValue());
         // zadne lustro nie jest polem ataku
         assertThat(result, not(hasItem(new Point(2, 1))));
@@ -324,9 +323,10 @@ public class KnightTest {
     // plansza 4x4, skoczek w rogu (0,0)
     @Test
     void boardIs4x4KnightInCorner(){
+        knightX = 0; knightY = 0;
         int boardSize = 4;
 
-        result = knight.calculateAttack(boardSize, 0, 0, new HashSet<>(), new HashSet<>());
+        result = knight.calculateAttack(boardSize, knightX, knightY, new HashSet<>(), new HashSet<>());
         assertThat(result, hasSize(2));
         assertThat(result, hasItem(new Point(2, 1)));
         assertThat(result, hasItem(new Point(1, 2)));
@@ -335,10 +335,11 @@ public class KnightTest {
     // plansza 11x11, skoczek w centrum (5,5), jedna przeszkoda w miejscu skoku
     @Test
     void boardIs11x11KnightInCenterWithObstacle(){
+        knightX = 5; knightY = 5;
         int boardSize = 11;
         Set<Point> przeszkody = new HashSet<>();
         przeszkody.add(new Point(3, 6));
-        result = knight.calculateAttack(boardSize, 5, 5, przeszkody, new HashSet<>());
+        result = knight.calculateAttack(boardSize, knightX, knightY, przeszkody, new HashSet<>());
 
         assertThat(result, hasSize(7));
         assertThat(result, hasItem(new Point(3, 4)));
@@ -354,8 +355,9 @@ public class KnightTest {
     // plansza 11x11, skoczek w rogu (0,0)
     @Test
     void boardIs11x11KnightInCorner(){
+        knightX = 0; knightY = 0;
         int boardSize = 11;
-        result = knight.calculateAttack(boardSize, 0, 0, new HashSet<>(), new HashSet<>());
+        result = knight.calculateAttack(boardSize, knightX, knightY, new HashSet<>(), new HashSet<>());
 
         assertThat(result, hasSize(2));
         assertThat(result, hasItem(new Point(2, 1)));
@@ -365,14 +367,16 @@ public class KnightTest {
     // plansza 1x1
     @Test
     void boardIs1x1KnightHasNoMoves(){
-        result = knight.calculateAttack(1, 0, 0, new HashSet<>(), new HashSet<>());
+        knightX = 0; knightY = 0;
+        result = knight.calculateAttack(1, knightX, knightY, new HashSet<>(), new HashSet<>());
         assertThat(result, hasSize(0));
     }
 
     // plansza 2x2
     @Test
     void boardIs2x2KnightHasNoMoves(){
-        result = knight.calculateAttack(2, 0, 0, new HashSet<>(), new HashSet<>());
+        knightX = 0; knightY = 0;
+        result = knight.calculateAttack(2, knightX, knightY, new HashSet<>(), new HashSet<>());
         assertThat(result, hasSize(0));
     }
 
@@ -381,6 +385,7 @@ public class KnightTest {
 
     @Test
     void shouldThrowWhenBoardSizeIsZero() {
+        result = null;
         assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(0, 0, 0, new HashSet<>(), null)
         );
@@ -388,6 +393,7 @@ public class KnightTest {
 
     @Test
     void shouldThrowWhenBoardSizeIsNegative() {
+        result = null;
         assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(-3, 0, 0, new HashSet<>(), null)
         );
@@ -395,6 +401,7 @@ public class KnightTest {
 
     @Test
     void shouldThrowWhenKnightYIsOutOfBoard() {
+        result = null;
         assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(8, 0, 8, new HashSet<>(), null)
         );
