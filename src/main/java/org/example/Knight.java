@@ -8,6 +8,16 @@ public class Knight {
 
     // plansza rozmiarow n x n
     public Set<Point> calculateAttack(int n, int knightX, int knightY, Set<Point> przeszkody, Set<Point> lustra){
+
+        if (n <= 0) {
+            throw new IllegalArgumentException("Rozmiar planszy musi byc wiekszy od 0, podano: " + n);
+        }
+        if (knightX < 0 || knightX >= n || knightY < 0 || knightY >= n) {
+            throw new IllegalArgumentException(
+                    "Pozycja skoczka (" + knightX + ", " + knightY + ") jest poza plansza rozmiaru " + n
+            );
+        }
+
         Set<Point> possibleMoves = new HashSet<>();
 
         //wszystkie mozliwe ruchy skoczka
@@ -37,6 +47,8 @@ public class Knight {
                 }
             }else{ // jesli sie nie miesci, to odbicie
                 Point odbiciePozycja = calculateBouncePosition(n, knightX, knightY, ruch[0], ruch[1]);
+                if (odbiciePozycja == null) continue; // plansza za mala
+
                 //sprawdz czy po odbiciu trafilismy na lustro
                 if (lustra != null && lustra.contains(odbiciePozycja)) {
                     Set<Point> odwiedzone = new HashSet<>(); // odwiedzone pozycje luster
@@ -61,24 +73,30 @@ public class Knight {
         int newX = knightX + dx;
         int newY = knightY + dy;
 
+        int maxIter = 10; // zabezpieczenie przed petla
+        int iter = 0;
+
         if (newX < 0 || newX >= n) {
             dx = -dx;  // odwroc kierunek w x
             newX = knightX + dx;
             // poki jest poza plansza - odbijaj ponownie
-            while (newX < 0 || newX >= n) {
+            while (newX < 0 || newX >= n && iter++ < maxIter) {
                 dx = -dx;
                 newX = knightX + dx;
             }
+            if (newX < 0 || newX >= n) return null; // brak ruchow, za mala plansza
         }
 
         // odbiciedla y
         if (newY < 0 || newY >= n) {
             dy = -dy;
             newY = knightY + dy;
-            while (newY < 0 || newY >= n) {
+            while (newY < 0 || newY >= n && iter++ < maxIter) {
                 dy = -dy;
                 newY = knightY + dy;
             }
+            if (newY < 0 || newY >= n) return null; // brak ruchow, za mala plansza
+
         }
 
         return new Point(newX, newY);
