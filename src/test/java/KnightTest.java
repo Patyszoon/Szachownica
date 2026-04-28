@@ -3,8 +3,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import java.util.List;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,20 +20,21 @@ public class KnightTest {
     private final Knight knight = new Knight();
     private final int n = 8;
     private int knightX, knightY;
-    private Set<Point> result;
+    private Collection<Point> result;
 
 
     @AfterEach
     void printPoints(TestInfo testInfo) {
         System.out.println("\n[" + testInfo.getDisplayName() + "]");
+        System.out.println("Start: (" + knightX + "," + knightY + ")");
 
-        if (result == null) {
-            System.out.println("Brak wyników jako Set (result = null)");
+        if (result == null || result.isEmpty()) {
+            System.out.println("Brak punktów");
             return;
         }
-        System.out.println("Ruchy skoczka z (" + knightX + "," + knightY + "):");
+
         result.forEach(p ->
-                System.out.println("  -> (" + p.x + ", " + p.y + ")")
+                System.out.println(" -> (" + p.x + ", " + p.y + ")")
         );
     }
 //    // executes before each test method in this class
@@ -43,7 +46,8 @@ public class KnightTest {
     // brak przeszkod, knight znajduje sie w centrum planszy, mozliwych attakow = 8
     @Test
     void knightHas8PossibleMoves(){
-        knightX = 4; knightY = 3;
+        knightX = 4;
+        knightY = 3;
         Set<Point> przeszkody = new HashSet<>();// pusty set
         Set<Point> lustra = new HashSet<>();// pusty set
 
@@ -160,8 +164,10 @@ public class KnightTest {
     @Test
     void knightBounceTest1_calculateBouncePositionTest(){
         knightX = 7; knightY = 7;
-        result = null;
+
         Point resultPoint = knight.calculateBouncePosition(n, knightX, knightY, 1, 2);
+        result = (resultPoint == null) ? List.of() : List.of(resultPoint);
+
         assertThat(resultPoint, equalTo(new Point(6, 5)));
     }
 
@@ -170,9 +176,8 @@ public class KnightTest {
     void knightBounceTest3() {
         knightX = 0; knightY = 1;
 
-        result = null;
-
         Point resultPoint = knight.calculateBouncePosition(n, knightX, knightY, -2, -1);
+        result = (resultPoint == null) ? List.of() : List.of(resultPoint);
 
         // oczekiwany wynik
         // newX = -2 -> odbicie: dx=2, newX=2
@@ -413,5 +418,4 @@ public class KnightTest {
                 knight.calculateAttack(8, 8, 8, new HashSet<>(), null)
         );
     }
-
 }
