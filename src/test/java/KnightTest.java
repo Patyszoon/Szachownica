@@ -273,8 +273,8 @@ public class KnightTest {
 
     }
 
-    // test z petla z luster
-    // (1,2) → (2,4) → odbicie → (3,2) → (4,4) → odbicie → (5,2) → odbicie → (4,4) *** PĘTLA ***
+    // test z petla z luster, 5 luster, skoczek zayczna na (0,0) i wykonuje ruch {1,2}
+    // (1,2) → (2,4) → odbicie → (3,2) → (4,4) → odbicie → (5,2) → odbicie → (4,4) PETLA
     @Test
     void infiniteLoopMirrorsTestBoardIs6x6(){
         // n=6, skoczek (0,0), ruch {1,2}:
@@ -300,6 +300,11 @@ public class KnightTest {
         // pozostale ruchy sa normalne
         assertThat(result, hasItem(new Point(2, 1)));
         assertThat(result, hasItem(new Point(2, 0)));
+
+        System.out.println("Ruchy skoczka z (0,0), petla 5 luster:");
+        for (Point p : result) {
+            System.out.println("  -> (" + p.x + ", " + p.y + ")");
+        }
     }
 
     // TEST ROZNE WYMIARY PLANSZY
@@ -393,33 +398,30 @@ public class KnightTest {
 
     @Test
     void shouldThrowWhenBoardSizeIsZero() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(0, 0, 0, new HashSet<>(), null)
         );
     }
 
     @Test
     void shouldThrowWhenBoardSizeIsNegative() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(-3, 0, 0, new HashSet<>(), null)
         );
     }
 
     @Test
     void shouldThrowWhenKnightYIsOutOfBoard() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(8, 0, 8, new HashSet<>(), null)
         );
     }
 
     @Test
     void shouldThrowWhenKnightOutOfBounds(){
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 knight.calculateAttack(8, 8, 8, new HashSet<>(), null)
         );
     }
-
-
-
 
 }
